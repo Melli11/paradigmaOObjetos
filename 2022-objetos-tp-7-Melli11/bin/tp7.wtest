@@ -1,0 +1,102 @@
+import tp.*
+
+test "Una cuenta Biza es capaz de consultar su saldo" {
+		
+		const cuentaA = new Cuenta() 
+		
+		assert.equals(0,cuentaA.saldo())
+}
+
+test "Una cuenta Biza puede recibir depositos de dinero" {
+		
+		const cuentaA = new Cuenta(saldo = 10)
+		const fechaActual = new Date() // 11/11/2022
+		cuentaA.depositar(100,fechaActual)
+		assert.equals(110,cuentaA.saldo())
+}
+
+test "El contador de transaccion de una cuenta luego de recibir un deposito es de 1" {
+		
+		const cuentaA = new Cuenta(saldo = 10)
+		const fechaActual = new Date() // 11/11/2022
+		cuentaA.depositar(100,fechaActual)
+		assert.equals(1,cuentaA.contadorDeTransaccion())
+}
+
+test "Sean dos cuentas diferentes, sus contadores de transaccion son independientes"{
+		const cuentaA = new Cuenta(saldo = 10)
+		const cuentaB = new Cuenta(saldo = 10)
+	
+		const fechaActual = new Date() // 11/11/2022
+		cuentaA.depositar(100,fechaActual)
+		cuentaB.depositar(100,fechaActual)
+		cuentaB.depositar(100,fechaActual)
+		assert.equals(1,cuentaA.contadorDeTransaccion())
+		assert.equals(2,cuentaB.contadorDeTransaccion())
+	
+}
+
+test "Una cuenta informo al banco correctamente"{
+		const cuentaA = new Cuenta(saldo = 10)
+		assert.that(cuentaA.informarAlBanco())
+		
+}
+
+
+test "Una cuenta no puede recibir mas de 5 transacciones sino aviso al banco"{
+		const cuentaA = new Cuenta(saldo = 10)
+		const fechaActual = new Date() // 11/11/2022
+
+		assert.throwsExceptionWithMessage (
+		"No es posible realizar la operación, la cuenta no esta autorizada", 
+		{	cuentaA.depositar(100,fechaActual)
+			cuentaA.depositar(100,fechaActual)
+			cuentaA.depositar(100,fechaActual)
+			cuentaA.depositar(100,fechaActual)
+			cuentaA.depositar(100,fechaActual)
+			cuentaA.depositar(100,fechaActual)
+		})
+		
+}		
+		
+test "Una cuenta Biza puede retirar dinero cuando tiene suficiente saldo" {
+		
+		const cuentaA = new Cuenta(saldo = 1000)
+		const fechaActual = new Date() // 11/11/2022
+		
+		cuentaA.retirar(100,fechaActual)
+		assert.equals(900,cuentaA.saldo())
+}
+
+test "Una cuenta Biza NO puede retirar dinero cuando NO tiene saldo suficiente " {
+		
+		const cuentaA = new Cuenta(saldo = 10) 
+		const fechaActual = new Date() // 11/11/2022
+		
+		assert.throwsExceptionWithMessage(
+		"La cuenta no posee fondos suficientes", 
+		{ cuentaA.retirar(100,fechaActual) })
+}
+
+test "Una cuenta Biza es capaz de transferir dinero a otra cuenta" {
+	
+		const cuentaA = new Cuenta(saldo = 1000)
+		const cuentaB = new Cuenta (saldo = 0)
+		const fechaActual = new Date() // 11/11/2022
+		
+		cuentaA.transferir(1000,cuentaB,fechaActual)
+		assert.equals(0,cuentaA.saldo())
+		assert.equals(1000,cuentaB.saldo())
+}
+
+test "Una cuenta Biza NO es capaz de transferir dinero a otra cuenta si NO posee saldo suficiente" {
+	
+		const cuentaA = new Cuenta(saldo = 1000)
+		const cuentaB = new Cuenta (saldo = 0)
+		const fechaActual = new Date() // 11/11/2022
+
+		assert.throwsExceptionWithMessage(
+		"La cuenta no posee fondos suficientes", 
+		{ cuentaA.transferir(2000,cuentaB,fechaActual)})
+		
+}

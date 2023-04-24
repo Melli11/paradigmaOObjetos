@@ -1,0 +1,98 @@
+import protagonista.*
+import cosasQueCaen.*
+import wollok.game.*
+import gameEngine.*
+import nivel.*
+
+describe "protagonista" {
+	const xInicial = 0
+	const vidasIniciales = 3
+	const puntosIniciales = 0
+	const nivel = new Nivel(ancho=10)
+	const protagonista = new Protagonista(
+		x=xInicial,
+		vidas=vidasIniciales,
+		puntos=puntosIniciales,
+		nivel=nivel
+	)
+	
+	method protagonistaConXInicial(x) = new Protagonista(
+		x=x,
+		vidas=vidasIniciales,
+		puntos=puntosIniciales,
+		nivel=nivel
+	)
+
+	method protagonistaConVidas(unasVidas) {
+		return new Protagonista(x=xInicial,
+								vidas=unasVidas,
+								puntos=puntosIniciales,
+								nivel=nivel
+		)
+	}
+	
+	method protagonistaEnNivel(unNivel) {
+		return new Protagonista(x=xInicial,
+								vidas=vidasIniciales,
+								puntos=puntosIniciales,
+								nivel=unNivel
+		)
+	}
+	
+	method initialize() {
+		gameEngine.configurarParaTests()
+	}
+
+	test "se puede mover a la derecha de a una posicion" {
+		protagonista.moverHaciaDerecha()
+		
+		assert.equals(1, protagonista.x())
+	}	
+	
+	test "se puede mover a la izquierda de a una posicion" {
+		const protagonistaQueEmpiezaMasALaDerecha =
+			self.protagonistaConXInicial(2)
+
+		protagonistaQueEmpiezaMasALaDerecha.moverHaciaIzquierda()
+		
+		assert.equals(1, protagonistaQueEmpiezaMasALaDerecha.x())
+	}
+	
+	test "al agarrar un explosivo, pierde una vida" {
+		protagonista.agarrar(new Bomba(posicion=game.center(), nivel = new Nivel(ancho=10)))
+		
+		assert.equals(2, protagonista.vidas())
+	}
+	
+	test "al agarrar una fruta, gana una vida" {
+		const protagonistaQueEmpiezaCon2Vidas =
+			self.protagonistaConVidas(2)
+		protagonistaQueEmpiezaCon2Vidas.agarrar(new Manzana(posicion=game.center(), nivel = new Nivel(ancho=10)))
+		
+		assert.equals(3, protagonistaQueEmpiezaCon2Vidas.vidas())
+	}
+	
+	test "al agarrar dinero, gana tantos puntos como lo que valga" {
+		protagonista.agarrar(new Moneda(valor=2, posicion=game.center(), nivel = new Nivel(ancho=10)))
+		
+		assert.equals(2, protagonista.puntos())
+	}
+	
+	test "si se sale por la izquierda vuelve a aparecer por la derecha" {
+		const protagonistaEnNivelAngosto =
+			self.protagonistaEnNivel(new Nivel(ancho=3))
+		
+		protagonistaEnNivelAngosto.moverHaciaIzquierda()
+
+		assert.equals(2, protagonistaEnNivelAngosto.x())
+	}
+	
+	test "si se sale por la derecha vuelve a aparecer por la izquierda" {
+		const protagonistaEnNivelAngosto =
+			self.protagonistaEnNivel(new Nivel(ancho=3))
+		
+		3.times { n => protagonistaEnNivelAngosto.moverHaciaDerecha() }
+
+		assert.equals(0, protagonistaEnNivelAngosto.x())
+	}
+}

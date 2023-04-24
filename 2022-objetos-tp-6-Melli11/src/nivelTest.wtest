@@ -1,0 +1,36 @@
+import nivel.*
+
+describe "Nivel" {
+	test "el extremo izquierdo es el X inicial" {
+		const nivel = new Nivel(ancho=2, xInicial=1)
+		
+		assert.equals(1, nivel.extremoIzquierdo())
+	}
+	
+	test "el extremo derecho es el ancho + el X inicial - 1" {
+		const nivel = new Nivel(ancho=2, xInicial=1)
+		
+		assert.equals(2, nivel.extremoDerecho())		
+	}
+	
+	test "moverse a una posicion entre los extremos deja en esa posicion" {
+		const nivel = new Nivel(ancho=5, xInicial=-3)
+		
+		assert.equals(-3, nivel.xAlMoverseA(-3))
+		assert.equals(1, nivel.xAlMoverseA(1))
+	}
+	
+	test "pasarse por 1 por cualquier lado deja del otro extremo" {
+		const nivel = new Nivel(xInicial=-3, ancho=5)
+
+		assert.equals(1, nivel.xAlMoverseA(-4))
+		assert.equals(-3, nivel.xAlMoverseA(2))
+	}
+	
+	test "pasarse por mas de 1 por cualquier lado sale por el otro extremo y avanza todo lo que sobró" {
+		const nivel = new Nivel(ancho=5, xInicial=-3)
+
+		assert.equals(-2, nivel.xAlMoverseA(3))
+		assert.equals(0, nivel.xAlMoverseA(-5))		
+	}
+}

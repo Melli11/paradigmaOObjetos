@@ -1,0 +1,146 @@
+import tp.*
+
+//describe "Test de maestros"{
+//
+//test "Un maestro ES groso si su poder es mayor a 1000 y su habilidad supera a 5" {
+//		
+//	const unMaestro = new Maestro(poder = 1001 ,habilidad = 6)
+//	assert.that(unMaestro.esGroso()) 
+//		
+//}
+//
+//test "Un maestro NO es groso si su poder NO es mayor a 1000 y su habilidad supera a 5" {
+//		
+//	const unMaestro = new Maestro(poder = 999 ,habilidad = 6)
+//	assert.notThat(unMaestro.esGroso()) 
+//		
+//}
+//
+//test "Un maestro NO es groso si su poder es mayor a 1000 y su habilidad NO supera a 5" {
+//		
+//	const unMaestro = new Maestro(poder = 2000,habilidad = 4)
+//	assert.notThat(unMaestro.esGroso()) 
+//		
+//}
+//
+//}
+
+describe "Test de maestro agua"{
+
+test "Un maestro agua ES groso porque su poder es mayor a 1000 y su habilidad supera a 5" {
+	const unaLunita = new Luna(intensidad = 250)	
+	const maestroAgua = new MaestroAgua(habilidad = 6, luna = unaLunita)
+	assert.equals(1256,maestroAgua.poder()) 
+	assert.that(maestroAgua.esGroso()) 
+	
+	}
+	
+test "Un maestro agua NO es groso si su poder NO es mayor a 1000 y su habilidad supera a 5" {
+		
+	const unaLunita = new Luna(intensidad = 100)	
+	const maestroAgua = new MaestroAgua(habilidad = 6,luna = unaLunita)
+	assert.equals(506,maestroAgua.poder()) 
+	assert.notThat(maestroAgua.esGroso()) 
+		
+}
+
+
+test "Un maestro agua NO es groso si su poder ES mayor a 1000 y su habilidad NO supera a 5" {
+		
+	const unaLunita = new Luna(intensidad = 300)	
+	const maestroAgua = new MaestroAgua(habilidad = 4,luna = unaLunita)
+	assert.equals(1504,maestroAgua.poder()) 
+	assert.notThat(maestroAgua.esGroso()) 
+		
+}
+
+test "Un maestro agua es peligroso si su poder es mayor a 100"{
+	const unaLunita = new Luna(intensidad = 300)	
+	const maestroAgua = new MaestroAgua(habilidad = 4,luna = unaLunita)
+	assert.equals(1504,maestroAgua.poder()) 
+	assert.that(maestroAgua.esPeligroso()) 
+	
+}
+
+}
+
+
+describe "Test de maestro fuego"{
+	
+	test "Un maestro fuego ES groso porque su poder es mayor a 1000 y su habilidad supera a 5" {
+	const maestroFuego = new MaestroFuego(rabia = 3000, nivelDeLocura = 2, habilidad = 6)
+	assert.equals(1500,maestroFuego.poder()) 
+	assert.that(maestroFuego .esGroso()) 
+	
+	}
+	
+test "Un maestro fuego NO es groso si su poder NO es mayor a 1000 y su habilidad supera a 5" {
+		
+	const maestroFuego = new MaestroFuego(rabia = 2000, nivelDeLocura = 2, habilidad = 6)
+	assert.equals(1000,maestroFuego.poder()) 
+	assert.notThat(maestroFuego.esGroso()) 
+		
+}
+
+
+test "Un maestro fuego NO es groso si su poder ES mayor a 1000 y su habilidad NO supera a 5" {
+		
+	const maestroFuego = new MaestroFuego(rabia = 3000, nivelDeLocura = 2, habilidad = 4)
+	assert.equals(1500,maestroFuego.poder()) 
+	assert.notThat(maestroFuego.esGroso()) 
+		
+}	
+}
+
+describe "Test de maestro aire"{
+	
+
+test "Un maestro aire ES groso porque su poder es mayor a 1000 y su habilidad supera a 5" {
+	const unaMascota = new Mascota(poder = 300)	
+	const maestroAire = new MaestroAire(ligereza = 4,mascota = unaMascota,habilidad = 6)
+	assert.equals(1200,maestroAire.poder()) 
+	assert.that(maestroAire.esGroso()) 
+	
+	}
+	
+test "Un maestro aire NO es groso si su poder NO es mayor a 1000 y su habilidad supera a 5" {
+		
+	const unaMascota = new Mascota(poder = 100)	
+	const maestroAire = new MaestroAire(ligereza = 6,mascota = unaMascota,habilidad = 6)
+	assert.equals(600,maestroAire.poder()) 
+	assert.notThat(maestroAire .esGroso()) 
+		
+}
+
+
+test "Un maestro aire NO es groso si su poder ES mayor a 1000 y su habilidad NO supera a 5" {
+		
+	const unaMascota = new Mascota(poder = 300)	
+	const maestroAire = new MaestroAire(ligereza = 4,mascota = unaMascota,habilidad = 4)
+	assert.equals(1200,maestroAire.poder()) 
+	assert.notThat(maestroAire .esGroso()) 
+		
+}
+}
+
+describe "Test de maestro de sangre"{
+	
+	test "Un maestro de sangre ES peligroso siempre" {
+	const unaLunita = new Luna(intensidad = 250)	
+	const maestroSangre = new MaestroSangre (luna = unaLunita)
+	assert.that(maestroSangre.esPeligroso()) 
+	}
+	
+	test "Un maestro agua con habilidad 10 y unaLunita asignada tiene como poder 1260" {
+	const unaLunita = new Luna(intensidad = 250)	
+	const maestroAgua = new MaestroAgua(habilidad= 10,luna = unaLunita)
+	assert.equals(1260,maestroAgua.poder()) 
+	}
+	
+	test "Un maestro de sangre tiene el doble de poder que un maestro Agua" {
+	const unaLunita = new Luna(intensidad = 250)	
+	const maestroSangre= new MaestroSangre (habilidad= 10,luna = unaLunita)
+	assert.equals(1260*2,maestroSangre.poder()) 
+	}
+}
+

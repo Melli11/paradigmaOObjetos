@@ -1,0 +1,122 @@
+import tp4.*
+
+describe "Carrito de Compras"{
+	
+test "Un carrito de compras vacio no tiene ningun producto" {
+		const unCarrito = new CarroDeCompras()
+		assert.equals(0,unCarrito.cantidadDeProductos())
+	
+}
+
+test "Si agrego un producto a un carrito de compras, la cantidad de productos aumenta en 1" {
+		const unCarrito = new CarroDeCompras()
+		unCarrito.agregarProductos(new Producto(id = "grog_pack_x_6", precio = 300))
+		unCarrito.agregarProductos(new Producto(id = "papitas", precio = 200))
+		assert.equals(2,unCarrito.cantidadDeProductos())
+}
+
+
+test "Un producto tiene un id y un precio"{
+		const unProducto = new Producto(id = "grog_pack_x_6", precio = 300)
+		assert.equals("grog_pack_x_6",unProducto.id())
+		assert.equals(300,unProducto.precio())
+}
+
+test "El total a pagar de un carrito se calcula como la suma de los precios de todos sus productos"{
+		const unCarrito = new CarroDeCompras()
+		unCarrito.agregarProductos(new Producto(id = "grog_pack_x_6", precio = 300))
+		unCarrito.agregarProductos(new Producto(id = "papitas", precio = 200))
+		assert.equals(500,unCarrito.totalAPagar())
+		
+}
+
+test "El carrito quedará con un producto menos si saco un producto del mismo"{
+		const unCarrito = new CarroDeCompras()
+		unCarrito.agregarProductos(new Producto(id = "grog_pack_x_6", precio = 300))
+		unCarrito.agregarProductos(new Producto(id = "papitas", precio = 200))
+		unCarrito.agregarProductos(new Producto(id = "pasoDeLosToros", precio = 100))
+		unCarrito.eliminarProducto()
+		assert.equals(2,unCarrito.cantidadDeProductos())
+}
+test "Limpiar el carrito dejara el carrito sin productos"{
+		const unCarrito = new CarroDeCompras()
+		unCarrito.agregarProductos(new Producto(id = "grog_pack_x_6", precio = 300))
+		unCarrito.agregarProductos(new Producto(id = "papitas", precio = 200))
+		unCarrito.agregarProductos(new Producto(id = "pasoDeLosToros", precio = 100))
+		unCarrito.limpiarElCarrito()
+		assert.that(unCarrito.listaDeProductos().isEmpty())
+	
+	
+}
+}
+
+describe "Ventas"{
+
+test "El total facturado cuando no hubo ventas es de 0"	{
+		const unCarrito = new CarroDeCompras()
+		unCarrito.finalizarCompra()
+		assert.equals(0,registroDeVenta.totalFacturado())
+		}	
+
+test "Al realizar una venta se registran los productos vendidos y el total de la compra"{
+		const unCarrito = new CarroDeCompras()
+		unCarrito.agregarProductos(new Producto(id = "grog_pack_x_6", precio = 600))
+		unCarrito.agregarProductos(new Producto(id = "papitas", precio = 200))
+		unCarrito.agregarProductos(new Producto(id = "pasoDeLosToros", precio = 400))
+		unCarrito.finalizarCompra()
+		
+		assert.equals(1200,registroDeVenta.totalFacturado())
+		assert.equals(3,registroDeVenta.registrarTotalDeProductosDeUnaVenta().size())
+	
+}
+
+test "Al realizar una venta se vacia el carrito del cliente"{
+		const unCarrito = new CarroDeCompras()
+		unCarrito.agregarProductos(new Producto(id = "grog_pack_x_6", precio = 600))
+		unCarrito.agregarProductos(new Producto(id = "papitas", precio = 200))
+		unCarrito.agregarProductos(new Producto(id = "pasoDeLosToros", precio = 400))
+		unCarrito.finalizarCompra()
+		
+		assert.equals(0,unCarrito.listaDeProductos().size())
+		
+}
+	
+test "El total facturado se calcula como el total facturado de cada carrito"{
+		const unCarrito = new CarroDeCompras()
+		const otroCarrito = new CarroDeCompras()
+		
+		unCarrito.agregarProductos(new Producto(id = "grog_pack_x_6", precio = 600))
+		unCarrito.agregarProductos(new Producto(id = "papitas", precio = 200))
+		unCarrito.agregarProductos(new Producto(id = "pasoDeLosToros", precio = 400))
+		unCarrito.finalizarCompra()
+		
+		otroCarrito.agregarProductos(new Producto(id = "mayonesa", precio = 300))
+		otroCarrito.agregarProductos(new Producto(id = "pepas", precio = 200))
+		otroCarrito.agregarProductos(new Producto(id = "arroz", precio = 100))
+		otroCarrito.finalizarCompra()
+		
+		assert.equals(1200+600,registroDeVenta.totalFacturado())
+		
+		}
+test "El producto que mas veces se vendio, es aquel mas ventas tuvo "{
+	
+		const unCarrito = new CarroDeCompras()
+		const otroCarrito = new CarroDeCompras()
+		
+		unCarrito.agregarProductos(new Producto(id = "grog_pack_x_6", precio = 600))
+		unCarrito.agregarProductos(new Producto(id = "papitas", precio = 200))
+		unCarrito.agregarProductos(new Producto(id = "pasoDeLosToros", precio = 400))
+		unCarrito.finalizarCompra()
+		
+		otroCarrito.agregarProductos(new Producto(id = "grog_pack_x_6", precio = 600))
+		otroCarrito.agregarProductos(new Producto(id = "pepas", precio = 200))
+		otroCarrito.agregarProductos(new Producto(id = "arroz", precio = 100))
+		otroCarrito.finalizarCompra()
+		
+		assert.equals("grog_pack_x_6",registroDeVenta.productoQueMasVecesSeVendio())
+
+		}		
+		
+}
+
+	

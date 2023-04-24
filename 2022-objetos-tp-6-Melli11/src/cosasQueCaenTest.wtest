@@ -1,0 +1,138 @@
+import cosasQueCaen.*
+import gameEngine.*
+import protagonista.*
+import juego.*
+import viento.*
+import nivel.*
+
+describe "cosas que caen" {
+	const game = gameEngine
+	const nivel = new Nivel(xInicial=0, ancho=10)
+	method manzana(posicion) =
+		new Manzana(posicion=posicion, nivel=nivel)
+	method bomba(posicion) =
+		new Bomba(posicion=posicion, nivel=nivel)
+	method dinamita(posicion) =
+		new Dinamita(posicion=posicion, nivel=nivel)
+	method moneda(valor, posicion) =
+		new Moneda(valor=valor, posicion=posicion, nivel=nivel)
+	method uvas(posicion) =
+		new Uvas(posicion=posicion, nivel=nivel)
+
+	method assertListEquals(expected, actual) {
+		if(expected == actual) {
+			assert.that(true)
+		} else {
+			assert.fail(
+				"Expected: " + expected.toString() + " but found " + actual.toString()
+			)
+		}
+	}
+
+	method initialize() {
+		gameEngine.configurarParaTests()
+		juego.inicializarProtagonista(new Nivel(ancho=5))
+	}
+
+	method verificarQueAlAvanzarSuPosicionVale(cosa, nuevaPosicion) {
+		cosa.avanzar()
+		
+		assert.equals(nuevaPosicion, cosa.position())
+	}
+	
+	test "las cosas verticales avanzan bajando uno en y" {
+		const bomba = self.bomba(game.at(0, 10))
+
+		bomba.avanzar()
+		
+		assert.equals(game.at(0, 9), bomba.position())
+	}
+	
+	test "las cosas zigzag avanzan bajando uno en y moviendose hacia el costado en x" {
+		const dinamita = self.dinamita(game.at(5,10))
+		const recorrido = [dinamita.position()]
+
+		7.times { n =>
+			dinamita.avanzar()
+			recorrido.add(dinamita.position())
+		}
+		
+		self.assertListEquals(
+			[
+				game.at(5, 10),
+				game.at(4, 9),
+				game.at(3, 8),
+				game.at(4, 7),
+				game.at(5, 6),
+				game.at(6, 5),
+				game.at(7, 4),
+				game.at(6, 3)
+			],
+			recorrido
+		)
+	}
+	
+	test "las cosas zigzag al salir por un lado de la pantalla entran por el otro" {
+		const dinamita = new Dinamita(posicion=game.at(1, 10),
+									  nivel=new Nivel(xInicial=0, ancho=3)
+		)
+		const recorrido = [dinamita.position()]
+
+		4.times { n =>
+			dinamita.avanzar()
+			recorrido.add(dinamita.position())
+		}
+		
+		self.assertListEquals(
+			[
+				game.at(1, 10),
+				game.at(0, 9),
+				game.at(2, 8),
+				game.at(0, 7),
+				game.at(1, 6)
+			],
+			recorrido
+		)
+	}
+	
+	test "las cosas afectadas por el viento avanzan bajando en uno y moviendose segun la direccion e intensidad del viento" {
+		const corazon = self.uvas(game.at(5, 10))
+		viento.soplarHaciaDerechaConIntensidad(2)
+		
+		corazon.avanzar()
+		assert.equals(game.at(7, 9), corazon.position())
+		
+		viento.soplarHaciaIzquierdaConIntensidad(1)
+		
+		corazon.avanzar()
+		assert.equals(game.at(6, 8), corazon.position())
+	}
+	
+	test "al salir de la pantalla por abajo, se borran del juego" {
+		const moneda = new Moneda(valor=1, posicion=game.at(0, 0), nivel=nivel)
+		game.addVisual(moneda)
+		
+		moneda.avanzar()
+		
+		assert.equals(-1, moneda.position().y())
+		assert.notThat(game.hasVisual(moneda))
+	}
+	
+	test "si sale dinero del juego por abajo, se pierde una vida" {
+		const moneda = new Moneda(valor=1, posicion=game.at(0, 0), nivel=nivel)
+		game.addVisual(moneda)
+
+		moneda.avanzar()
+		
+		assert.equals(2, juego.protagonista().vidas())
+	}
+	
+	test "si sale dinero del juego porque la agarro un jugador, no se pierde ninguna vida" {
+		const moneda = new Moneda(valor=1, posicion=game.at(0, 0), nivel=nivel)
+		game.addVisual(moneda)
+
+		juego.protagonista().agarrar(moneda)
+		
+		assert.equals(3, juego.protagonista().vidas())
+	}
+}
