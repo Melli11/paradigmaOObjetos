@@ -1,0 +1,107 @@
+import tp3.*
+
+describe "Test de escribano Andretta"{
+
+test "La edad de Andretta es 60" {
+		assert.equals(60,escribanoAndretta.edad())
+}
+
+test "La pasion de Andretta es hablarDeFutbol" {
+		assert.equals(hablarDeFutbol,escribanoAndretta.pasion())
+}
+
+test "La energia inicial de Andretta es 8200"{
+		assert.equals(8200,escribanoAndretta.energia())
+}
+
+test "Disfrutar de su pasion le resta 100 de energia a su energia actual"{
+		escribanoAndretta.disfrutarSuPasion()
+		assert.equals(8050,escribanoAndretta.energia())
+}
+			
+}
+
+describe "Test de Pablo Sandoval"{
+
+test "La edad de Pablo es 54" {
+		assert.equals(54,pabloSandoval.edad())
+}
+
+test "La pasion de Pablito es emborracharse y buscar pleitos" {
+		assert.equals(emborracharse,pabloSandoval.pasion())
+}
+
+test "La energia inicial de Pablito es 8380"{
+		assert.equals(8380,pabloSandoval.energia())
+}
+
+test "Disfruta de su pasion lo deja con 100 de energia"{
+		pabloSandoval.disfrutarSuPasion()
+		assert.equals(100,pabloSandoval.energia())
+}
+
+}
+
+describe "Test de Manu Ginobili"{
+
+test "La edad de Manu es 45" {
+		assert.equals(45,manuGinobili.edad())
+}
+
+test "La pasion de Manu es jugar al basket " {
+		assert.equals(hacerUnDeporte,manuGinobili.pasion())
+}
+
+test "La energia inicial de Manu es 8650"{
+		assert.equals(8650,manuGinobili.energia())
+}
+
+test "Disfrutar de su pasion le consume 85% puntos de energia"{
+	  	manuGinobili.disfrutarSuPasion()
+		assert.equals(1297.5,manuGinobili.energia())	
+}
+	
+}
+
+describe "Test de Bilardios"{
+
+test "La edad de Bilardo es 84" {
+		assert.equals(84,bilardo.edad())
+}
+
+test "La pasion de Bilardo es hablar de futbol" {
+		assert.equals(hablarDeFutbol,bilardo.pasion())
+}
+
+test "La energia inicial de Bilardo es 7480"{
+		assert.equals(7480,bilardo.energia())
+}
+
+test "Disfrutar de su pasion le consume 85% de puntos de energia "{
+	 bilardo.disfrutarSuPasion()
+	 assert.equals(7330,bilardo.energia())
+}
+
+}
+
+describe "Test de Franco Milazzo"{
+
+test "La edad de Milazzo es 38" {
+		assert.equals(38,francoMilazzo.edad())
+}
+
+test "La pasion de Milazzo es hacer un deporte " {
+		assert.equals(hacerUnDeporte,francoMilazzo.pasion())
+}
+
+test "La energia inicial de Franco Milazzo es 8860"{
+		assert.equals(8860,francoMilazzo.energia())
+}
+
+test "Disfrutar de su pasion le consume  63% de puntos de energia"{
+		francoMilazzo.disfrutarSuPasion()
+		assert.equals(3278.2,francoMilazzo.energia())
+}
+}
+
+

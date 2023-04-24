@@ -1,0 +1,159 @@
+import tp1.*
+
+describe "pepe"{
+	
+test "si pepe es cadete su neto es de 20000" {
+		pepe.categoria(cadete)
+		assert.equals(20000,pepe.neto())		
+}
+
+test "si pepe es gerente su neto es de 15000" {
+		pepe.categoria(gerente)
+		assert.equals(15000,pepe.neto())
+		
+}
+
+//BONOS POR RESULTADOS
+
+test "si pepe tiene categoria cadete y un bono de porcentaje el valor del bono es de 2000"{
+		pepe.categoria(cadete)
+		pepe.bono(porcentaje)
+		assert.equals(2000,pepe.bonoXResultado())
+}
+
+test "si pepe tiene categoria cadete y un bono de fijo el valor del bono es de 800"{
+		pepe.categoria(cadete)
+		pepe.bono(fijo)
+		assert.equals(800,pepe.bonoXResultado())
+}
+
+test "si pepe tiene categoria cadete y un bono nulo el valor del bono es de 0"{
+		pepe.categoria(cadete)
+		pepe.bono(nulo)
+		assert.equals(0,pepe.bonoXResultado())
+}
+
+
+//BONOS POR PRESENTISMO
+
+test "si a pepe se le aplica el bono de presentismo y no tiene faltas el valor de su bono es de 2000"{
+		pepe.bono(normal)
+		assert.equals(2000,pepe.bonoXPresentismo())
+}
+
+test "si a pepe se le aplica el bono de presentismo y tiene una falta el valor de su bono es de 1000"{
+		pepe.falto(1)
+		pepe.bono(normal)
+		assert.equals(1000,pepe.bonoXPresentismo())
+}
+
+test "si a pepe se le aplica el bono de presentismo y tiene mas de una falta el valor de su bono es de 0"{
+		pepe.falto(2)
+		pepe.bono(normal)
+		assert.equals(0,pepe.bonoXPresentismo())
+}
+
+
+test "si a pepe se le aplica el bono de ajuste y no tiene faltas el valor de su bono es de 100"{
+		pepe.bono(ajuste)
+		assert.equals(100,pepe.bonoXPresentismo())
+}
+
+test "si a pepe se le aplica el bono de ajuste y tiene faltas el valor de su bono es de 0"{
+		pepe.falto(1)
+		pepe.bono(ajuste)
+		assert.equals(0,pepe.bonoXPresentismo())
+}
+
+test "si a pepe se le aplica el bono demagogico y su neto es menor a 18000 el valor de su bono es de 500"{
+		pepe.categoria(gerente)
+		pepe.bono(demagogico)
+		pepe.falto(10)
+		assert.equals(500,pepe.bonoXPresentismo())
+}
+
+
+test "si a pepe se le aplica el bono demagogico y su neto es mayor a 18000 el valor de su bono es de 300"{
+		pepe.categoria(cadete)
+		pepe.bono(demagogico)
+		pepe.falto(0)
+		assert.equals(300,pepe.bonoXPresentismo())
+}
+	
+
+test "si a pepe se le aplica el bono nulo el valor de su bono es 0 "{
+		pepe.bono(nulo)
+		assert.equals(0,pepe.bonoXPresentismo())
+}
+
+//SUELDO TOTAL
+
+test "si pepe es un cadete con presentismo perfecto y se le aplican los bonos de porcentaje y normal su sueldo es de 24000"{
+		pepe.categoria(cadete)
+		pepe.bono(normal)
+		pepe.bono(porcentaje)
+		assert.equals(24000,pepe.sueldo())
+}
+
+}
+//SOFIA
+describe "sofia"{
+test "el neto de sofia es 30% superior a su categoria"{
+		sofia.categoria(cadete)
+		assert.equals(26000,sofia.neto())
+}
+
+
+
+}
+//VENDEDOR
+
+describe "vendedor"{
+test "el neto de pepe vendedor sin plus es de 16000"{
+	pepe.categoria(vendedor)
+	assert.equals(16000,pepe.neto())
+	}
+
+test "el neto de todos los vendedores con el plus de ventas activado es 25% superior a su neto"{
+	pepe.categoria(vendedor)
+	sofia.categoria(vendedor)
+	vendedor.activarAumentoPorMuchasVentas()
+	assert.equals(20000,pepe.neto())
+	assert.equals(26000,sofia.neto())
+	}
+	
+	
+}
+
+//CARLA
+describe "carla"{
+test "el neto de carla es 28000"{
+	assert.equals(28000,carla.neto())
+	}
+test "el sueldo de carla luego de aplicarle un bono de porcentaje es 39800"{
+	carla.bono(porcentaje)
+	assert.equals(39800,carla.sueldo())
+	}
+	
+}
+
+//OLIVER
+describe "oliver trabajando con pepe y sofia"{
+test "el sueldo de oliver trabajando con pepe luego de aplicar un bono de ajuste es 20100"{
+	pepe.categoria(cadete)
+	oliver.trabajaCon(pepe)
+	oliver.bono(ajuste)
+	assert.equals(20100,oliver.sueldo())
+}
+
+
+test "el sueldo de oliver trabajando con sofia luego de aplicar un bono demagogico es 19800"{
+	sofia.categoria(gerente)
+	oliver.trabajaCon(sofia)
+	oliver.bono(demagogico)
+	assert.equals(19800,oliver.sueldo())
+}
+
+}
+
+

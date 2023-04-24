@@ -1,0 +1,54 @@
+import tp2.*
+
+describe "Kilo de Pluma"{
+test "El peso de un kilo de pluma es 1" {
+		assert.equals(1,kiloDePluma.peso())
+}
+}
+
+describe "Kilo de Plomo"{
+test "El peso de un kilo de plomo es 1" {
+		assert.equals(1,kiloDePlomo.peso())
+}
+}
+
+describe "Balanza"{
+test "un kilo de plomo no es mayor a un kilo de plumas según su peso" {
+		balanza.estaPesando(kiloDePlomo,kiloDePluma)
+		assert.notThat(balanza.esMayorElPrimeroSegunElPeso())
+		
+}
+
+test "un kilo de plumas no es mayor a un kilo de plumas según su peso" {
+		balanza.estaPesando(kiloDePluma,kiloDePlomo)
+		assert.notThat(balanza.esMayorElPrimeroSegunElPeso())		
+}
+
+test "un kilo de plumas es igual a un kilo de plomo segun su peso." {
+		balanza.estaPesando(kiloDePluma,kiloDePlomo)
+		assert.that(balanza.sonIgualesSegunElPeso())
+
+}
+
+test "un kilo de plumas es mayor a un kilo de plomo según su volumen." {
+		balanza.estaPesando(kiloDePluma,kiloDePlomo)
+		assert.that(balanza.esMayorElPrimeroSegunElVolumen())
+}
+
+
+}
+
+describe "Caja de Madera"{
+	test "el peso de un kilo de plumas es menor que el peso de una caja que contiene un kilo de plumas" {
+		cajaDeMadera.contiene(kiloDePluma)
+		balanza.estaPesando(kiloDePluma,cajaDeMadera)
+		assert.notThat(balanza.esMayorElPrimeroSegunElPeso()) // NO ES CIERTO QUE EL KILO DE PLUMAS ES MAS PESADO QUE EL PESO DE LA CAJA CON UN KILO DE PLUMAS
+}
+	test "el peso de la caja vacia es 0,2 " {
+		assert.equals(0.2,cajaDeMadera.peso())
+
+
+}
+}
+
+
