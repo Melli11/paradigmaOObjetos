@@ -1,0 +1,97 @@
+import example.*
+
+describe "punto 1"{
+	
+	test "agregar un suenio deberia agregarlo a la lista de pendientes"{
+	
+	const serBombero  = new RecibirseDe(carrera = "bombero")
+	const pepe = new Persona (profesion = "taxista", quiereEstudiar= "bombero")
+	pepe.agregarSuenio(serBombero )
+	assert.equals(pepe.sueniosPendientes(),#{serBombero })	
+	}
+		
+	
+	
+	test "no puede cumplir el suenio de recibirse si no desea estudiar  la carrera "{
+
+	const serBombero = new RecibirseDe(carrera = "bombero")
+	const pepe = new Persona (profesion = "taxista", quiereEstudiar= "enfermeria")
+	pepe.cumplirSuenio(serBombero)
+	assert.equals(pepe.sueniosPendientes(),#{serBombero })	
+	}
+	
+	test "no puede cumplir el suenio de recibirse si ya está recibido de la carrera"{
+
+	const serBombero = new RecibirseDe(carrera = "bombero")
+	const pepe = new Persona (profesion = "bombero", quiereEstudiar= "bombero")
+	pepe.cumplirSuenio(serBombero )
+	assert.equals(pepe.sueniosPendientes(),#{serBombero })	
+	}
+	
+	
+	
+	test "suenio: recibirse de algo "{
+
+	const serBombero  = new RecibirseDe(carrera = "bombero")
+	const pepe = new Persona (profesion = "taxista", quiereEstudiar= "bombero")
+	pepe.cumplirSuenio(serBombero )
+	assert.equals(pepe.sueniosCumplidos(),#{serBombero })	
+	}
+	
+	test "suenio: consigue el Trabajo que desea "{
+	
+	const trabajarComotester = new ConseguirTrabajo(remuneracion = 20000)
+	const pepe = new Persona (remuneracionPretendida = 10000)
+	
+	pepe.cumplirSuenio(trabajarComotester )
+	assert.equals(pepe.sueniosCumplidos(),#{trabajarComotester})	
+		
+	}
+	
+	test "suenio: no puede conseguir el trabajo porque pagan menos de lo que pretende"{
+	
+	const trabajarComotester = new ConseguirTrabajo(remuneracion = 5000)
+	const pepe = new Persona (remuneracionPretendida = 10000)
+	pepe.cumplirSuenio(trabajarComotester)
+	
+	assert.equals(pepe.sueniosPendientes(),#{trabajarComotester})
+		
+	}
+	
+	test "si tiene un hijo no puede adoptar a otro"{
+		
+	const pepe = new Persona (tieneHijos = true)
+	const deseaAdoptar = new TenerHijoAdoptivo(cantidad = 2)
+	pepe.cumplirSuenio(deseaAdoptar )	
+	assert.equals(pepe.sueniosPendientes(),#{deseaAdoptar})
+	}
+	
+	test "si no tiene un hijo puede adoptar "{
+		
+	const pepe = new Persona (tieneHijos = false)
+	const deseaAdoptar = new TenerHijoAdoptivo(cantidad = 2)
+
+	pepe.cumplirSuenio(deseaAdoptar )	
+	assert.equals(pepe.sueniosCumplidos(),#{deseaAdoptar})
+	}
+	
+	test "se cumple el sueño de viajar a un lugar si estaba en su lista de viajes planificados"{
+	
+	const pepe = new Persona (lugaresQueDeseaViajar = ["canchaDeRiver","Patagonia","Cataratas","Salta"])
+	const deseaViajar = new ViajarA(destino= "canchaDeRiver")
+
+	pepe.cumplirSuenio(deseaViajar)	
+	assert.equals(pepe.sueniosCumplidos(),#{deseaViajar})
+		
+	}
+	
+	test "No se cumple el sueño de viajar a un lugar si el viaje NO estaba en su lista de viajes planificados"{
+	
+	const pepe = new Persona (lugaresQueDeseaViajar = ["canchaDeRiver","Patagonia","Cataratas","Salta"])
+	const deseaViajar = new ViajarA(destino= "canchaDeBocaca")
+
+	pepe.cumplirSuenio(deseaViajar)	
+	assert.equals(pepe.sueniosPendientes(),#{deseaViajar})
+		
+	}
+}

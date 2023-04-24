@@ -1,0 +1,160 @@
+import example.*
+
+describe "condicionesClimaticas"{
+	
+	test "Si cayeron 10 mm de lluvia la vel max de circulacion en una ruta de tierra es de 50 " {
+
+	condicionesClimaticas.mmLLuviaCaidos(10)
+	const rutaDeTierra = new Ruta(tipoDeRuta = tierra)
+	assert.equals(rutaDeTierra.velMaximaDeCirculacion(),50)
+
+}
+
+	
+}
+
+describe "Punto_1"{
+	
+	test "LA VELOCIDAD FINAL de un vehiculo que tiene vel base 100 y que circula por una ruta con vientos de intensidad 10  "{
+	condicionesClimaticas.intensidadDelViento(10)
+	const rutaDeTierra = new Ruta(tipoDeRuta = tierra)
+	const  auto = new AutoParticular(velocidadAutomotor = 100,ruta = rutaDeTierra)
+	
+	assert.equals(auto.velocidadFinal(),50)
+	
+	}
+	
+	test "La vel final de un vehiculo de transporte que sube 10 pasajeros y que circula por una ruta con vientos de intensidad 30 y lluvia 10"{
+	condicionesClimaticas.intensidadDelViento(30)
+	const rutaDeTierra = new Ruta(tipoDeRuta = tierra)
+	const  colectivo = new VehiculoDeTransporte (pasajerosQueSube= 10,ruta = rutaDeTierra)
+	
+	assert.equals(colectivo .velocidadBase(),110)
+	assert.equals(colectivo .velocidad(),80)
+	assert.equals(colectivo.velocidadFinal(),50)
+	
+	}
+}
+	
+describe "Punto_2"{
+	
+	test "2a) El tiempo que se tarda en recorrer una ruta de extension 50kms con una velocidad final de 50 es de 1 hora"{
+		
+	condicionesClimaticas.intensidadDelViento(30)
+	const rutaDeTierra = new Ruta(tipoDeRuta = tierra,extension = 50)
+	const  colectivo = new VehiculoDeTransporte (pasajerosQueSube= 10,ruta = rutaDeTierra)
+	
+	assert.equals(colectivo .velocidadBase(),110)
+	assert.equals(colectivo .velocidad(),80)
+	assert.equals(colectivo.velocidadFinal(),50)
+	assert.equals(rutaDeTierra.tiempoQueTardaEnRecorrerla(colectivo),1)
+	}	
+	
+	test "2b) El tiempo que se tarda en recorrer un camino"{
+		
+	condicionesClimaticas.intensidadDelViento(30)
+	
+	const rutaDeTierra = new Ruta(tipoDeRuta = tierra,extension = 50)
+	const rutaDeAsfalto = new Ruta(tipoDeRuta = asfalto,extension = 50)
+	
+	const  colectivo = new VehiculoDeTransporte (pasajerosQueSube= 10,ruta = rutaDeTierra, camino = [rutaDeTierra,rutaDeAsfalto])
+	
+	assert.equals(colectivo .velocidadBase(),110)
+	assert.equals(colectivo .velocidad(),80)
+	assert.equals(colectivo.velocidadFinal(),50)
+	assert.equals(colectivo.tiempoQueTardaParaUnCamino(),2)
+	}
+}
+
+
+describe "Ejemplo del Parcial"{
+	test "parcial"{
+	
+	var rueda1 = new Rueda(desgaste = 0)
+	var rueda2 = new Rueda(desgaste = 0)
+	var rueda3 = new Rueda(desgaste = 0)
+	var rueda4 = new Rueda(desgaste = 0)
+	
+	asfalto.maxima(50)
+	const ruta33 = 	 new Ruta (tipoDeRuta = asfalto , extension = 100 , velMaximaDeCirculacion = 50)
+	const  camioneta = new VehiculoDeCarga(carga = 3,desgaste = [rueda1,rueda2,rueda3,rueda4])
+	
+	condicionesClimaticas.intensidadDelViento(15)
+	ruta33.esRecorridaPor(camioneta)
+	assert.equals(camioneta.velocidad(),65)
+	assert.equals(camioneta.velocidadFinal(),50)
+	assert.equals(ruta33.tiempoQueTardaEnRecorrerla(camioneta),2)
+		
+	}
+	
+}
+
+describe "Punto 3"{
+	test "recorrer un camino implica que el vehiculo gastara sus ruedas"{
+	
+	var rueda1 = new Rueda(desgaste = 13)
+	var rueda2 = new Rueda(desgaste = 13)
+	var rueda3 = new Rueda(desgaste = 35)
+	var rueda4 = new Rueda(desgaste = 40)
+	
+	asfalto.maxima(50)
+	const ruta33 = 	 new Ruta (tipoDeRuta = asfalto , extension = 100 , velMaximaDeCirculacion = 50)
+	const  camioneta = new VehiculoDeCarga(carga = 3,desgaste = [rueda1,rueda2,rueda3,rueda4], camino = [ruta33])
+	
+	condicionesClimaticas.intensidadDelViento(15)
+	camioneta.realizarCamino()
+	assert.equals(camioneta.velocidad(),65)
+	assert.equals(camioneta.velocidadFinal(),50)
+	assert.equals(ruta33.tiempoQueTardaEnRecorrerla(camioneta),2)
+	assert.equals(rueda1.desgaste(),17)
+	assert.equals(rueda2.desgaste(),17)
+	assert.equals(rueda3.desgaste(),39)
+	assert.equals(rueda4.desgaste(),44)	
+	}
+	
+	
+
+	test "recorrer un camino implica que el camion gastara sus ruedas"{
+	
+	var rueda1 = new Rueda(desgaste = 0)
+	const ruta40 = 	 new Ruta (tipoDeRuta = ripio, extension = 100 , velMaximaDeCirculacion = 50)
+	const  camion = new VehiculoDeCarga(carga = 50,desgaste = [rueda1], camino = [ruta40])
+	
+	condicionesClimaticas.intensidadDelViento(15)
+	camion.realizarCamino()
+	assert.equals(camion.velocidad(),45)
+	assert.equals(camion.velocidadFinal(),45)
+	assert.equals(rueda1.desgaste(),4.5)
+	//	24.times{ n => camion.agregarRueda(new Rueda(desgaste = 0))} 
+	//	assert.equals(ruta40.tiempoQueTardaEnRecorrerla(camion),2)
+	
+	}
+	
+}
+
+describe "Punto 4"{
+	
+	test "mejorar una ruta de tierra implica que la ruta ahora será de ripio"{
+	
+	const ruta = new Ruta(tipoDeRuta = tierra)
+	ruta.mejorarRuta()
+	assert.equals(ruta.tipoDeRuta(),ripio)	
+	}
+	
+	test "mejorar una ruta de ripio implica que la ruta ahora será de asfalto"{
+	
+	const ruta= new Ruta(tipoDeRuta = ripio)
+	ruta.mejorarRuta()
+	assert.equals(ruta.tipoDeRuta(),asfalto)	
+	}
+	
+	test "mejorar una ruta de asfalto implica que la ruta ahora mejorara su vel maxima en 5"{
+	
+	const ruta= new Ruta(tipoDeRuta = asfalto)
+	asfalto.maxima(100)
+	ruta.mejorarRuta()
+	assert.equals(asfalto.maxima(),105)
+	
+		
+	}
+}

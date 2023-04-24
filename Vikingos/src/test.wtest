@@ -1,0 +1,128 @@
+import example.*
+
+describe "Punto_1 subir a un vikingo a la expedicion"{
+
+	test "Se puede Subir a un vikingo de clase media que esta armado y es productivo" 
+	{
+	const vik_A = new Soldado (casta = new Karl(), asesino = 21, cantidadDeArmas = 5) // solo los soldados pueden tener armas
+	const expedicion_A = new Expedicion(destino = new Capital(nombre = "michigan", defensores = 100 , factorDeRiqueza = 20))
+	expedicion_A.subirAVikingo(vik_A)
+	assert.equals(expedicion_A.ejercito().size(),1)
+	}
+	
+	test "Se puede Subir a un vikingo de clase alta que es granjero y es productivo" 
+	{
+	const vik_A = new Granjero (casta = new Thrall(), cantidadDeHijos = 2 , cantidadDeHectareasQueTiene = 10) // 
+	const expedicion_A = new Expedicion(destino = new Capital(nombre = "michigan", defensores = 100 , factorDeRiqueza= 20))
+	expedicion_A.subirAVikingo(vik_A)
+	assert.equals(expedicion_A.ejercito().size(),1)
+	}
+	
+	test "No se puede Subir a un vikingo de clase alta que es granjero y no es productivo" 
+	{
+	const vik_A = new Granjero (casta = new Thrall(), cantidadDeHijos = 10 , cantidadDeHectareasQueTiene = 10) // 
+	const expedicion_A = new Expedicion(destino = new Capital(nombre = "michigan", defensores = 100 , factorDeRiqueza = 20))
+	assert.throwsException{expedicion_A.subirAVikingo(vik_A)}
+	
+	}
+	
+	test "No se puede Subir a un vikingo esclavo que esta armado " 
+	{
+	const vik_A = new Soldado (casta = new Jarl(), asesino = 21, cantidadDeArmas = 0) // solo los soldados pueden tener armas
+	const expedicion_A = new Expedicion(destino = new Capital(nombre = "michigan", defensores = 100 , factorDeRiqueza = 20))
+	assert.throwsException{expedicion_A.subirAVikingo(vik_A)}
+	}
+	
+}
+
+describe "Punto_2 La expedicion vale la pena"{
+	test "Una expedicion que invade 3 ciudades que valen la pena entonces vale la pena"{
+
+	const ciudad_valeLaPena_A = new Capital(nombre = "michigan", defensores = 10 , factorDeRiqueza = 20)
+	const ciudad_valeLaPena_B = new Capital(nombre = "michigan", defensores = 10, factorDeRiqueza = 20)
+	const ciudad_valeLaPena_C = new Capital(nombre = "michigan", defensores = 10, factorDeRiqueza = 20)
+	
+	const vik_A = new Granjero (casta = new Thrall(), cantidadDeHijos = 2 , cantidadDeHectareasQueTiene = 10) // 
+	const vik_B = new Soldado (casta = new Karl(), asesino = 21, cantidadDeArmas = 5) // solo los soldados pueden tener armas
+	const expedicion_A = new Expedicion(destino = #{ciudad_valeLaPena_A,ciudad_valeLaPena_B,ciudad_valeLaPena_C} )
+	
+	expedicion_A.subirAVikingo(vik_A)
+	expedicion_A.subirAVikingo(vik_B)
+	
+	assert.that(expedicion_A.valeLaPena())
+	}
+	
+	test "Una expedicion que invade 3 aldeas que valen la pena entonces vale la pena"{
+
+	const aldea_valeLaPena_A = new Aldea(monedas = 5, crucifijos = 25)
+	const aldea_valeLaPena_B = new Aldea(monedas = 5, crucifijos = 25)
+	const aldea_valeLaPena_C = new Aldea(monedas = 5, crucifijos = 25)
+	
+	const vik_A = new Granjero (casta = new Thrall(), cantidadDeHijos = 2 , cantidadDeHectareasQueTiene = 10) // 
+	const vik_B = new Soldado (casta = new Karl(), asesino = 21, cantidadDeArmas = 5) // solo los soldados pueden tener armas
+	const expedicion_A = new Expedicion(destino = #{aldea_valeLaPena_A,aldea_valeLaPena_B,aldea_valeLaPena_C} )
+	
+	expedicion_A.subirAVikingo(vik_A)
+	expedicion_A.subirAVikingo(vik_B)
+	
+	assert.that(expedicion_A.valeLaPena())
+	}
+	
+	
+	test "Una expedicion que invade 3 ciudades y uno de ellas no vale la pena entonces no vale la pena"{
+
+	const ciudad_valeLaPena_A = new Capital(nombre = "michigan", defensores = 10 , factorDeRiqueza = -100)
+	const ciudad_valeLaPena_B = new Capital(nombre = "michigan", defensores = 10, factorDeRiqueza = 20)
+	const ciudad_valeLaPena_C = new Capital(nombre = "michigan", defensores = 10, factorDeRiqueza = 20)
+	
+	const vik_A = new Granjero (casta = new Thrall(), cantidadDeHijos = 2 , cantidadDeHectareasQueTiene = 10) // 
+	const vik_B = new Soldado (casta = new Karl(), asesino = 21, cantidadDeArmas = 5) // solo los soldados pueden tener armas
+	const expedicion_A = new Expedicion(destino = #{ciudad_valeLaPena_A,ciudad_valeLaPena_B,ciudad_valeLaPena_C} )
+	
+	expedicion_A.subirAVikingo(vik_A)
+	expedicion_A.subirAVikingo(vik_B)
+	
+	assert.notThat(expedicion_A.valeLaPena())
+	}
+	
+	
+	
+	}
+	
+describe "Punto_3 realizar una expedicion"{
+	
+	test "realizar una expedicion implica que los vikingos de la trip repartan el botin equitativamente"{
+	
+	const aldea_valeLaPena_A = new Aldea(monedas = 5, crucifijos = 25)
+	const aldea_valeLaPena_B = new Aldea(monedas = 5, crucifijos = 25)
+	const aldea_valeLaPena_C = new Aldea(monedas = 5, crucifijos = 25)
+	
+	const vik_A = new Granjero (casta = new Thrall(), cantidadDeHijos = 2 , cantidadDeHectareasQueTiene = 10) // 
+	const vik_B = new Soldado (casta = new Karl(), asesino = 21, cantidadDeArmas = 5,oro = 100) // solo los soldados pueden tener armas
+	const expedicion_A = new Expedicion(destino = #{aldea_valeLaPena_A,aldea_valeLaPena_B,aldea_valeLaPena_C} )
+	
+	expedicion_A.subirAVikingo(vik_A)
+	expedicion_A.subirAVikingo(vik_B)
+	
+	expedicion_A.realizarExpedicion()
+	
+	assert.equals(vik_A.oro(),37.5)
+	assert.equals(vik_B.oro(),137.5)
+	
+	}
+}
+	
+	
+describe "Punto_5 ascenso social "{
+	
+	test "un jarl soldado que asciende obtiene 10 armas y la clase karl"{
+	
+	const vik_A = new Soldado (casta = new Jarl(), asesino = 21, cantidadDeArmas = 5,oro = 100) // solo los soldados pueden tener armas
+
+	vik_A.ascender()	
+	
+	assert.equals(vik_A.cantidadDeArmas(),15)
+	
+	}
+}
+	

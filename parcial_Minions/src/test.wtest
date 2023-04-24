@@ -1,0 +1,113 @@
+
+import example.*
+
+describe "Punto1"{
+	
+	test "un empleado que come una fruta recupera estamina " {
+	
+	const revolver = new Arma()
+	soldado.asignarArma(revolver)
+	const virus = new TipoDeAmenaza(gradoAmenaza= 10)	
+	const primeraDefensa = new DefenderSector(amenaza = virus)
+	
+	const minion1 = new Biclope (estamina = 1, rol = soldado) //tienen como maximo 10 de estamina
+	
+	minion1.comerFruta(manzana) //recupera 5 de stamina
+		
+	assert.equals(minion1.estamina(),6)
+	}
+	
+}
+
+describe "Punto3: Tarea Limpieza"{
+	
+	test "un obrero puede realizar una reparacion si dispone de la herramienta"{
+		
+		const martillo = new Herramienta()
+		const repararMaquina = new ArreglarUnaMaquina(complejidad = 10, requiereHerramientas = [martillo])
+		const minion1 = new Ciclope (estamina = 100, rol = obrero,tareas = [repararMaquina ]) //tienen como maximo 10 de estamina
+		assert.that(repararMaquina.puedeRealizarla(minion1))
+	}
+	
+	test "una mucama puede realizar una reparacion si la maquina no requiere de ninguna herramienta y tiene suficiente estamina"{
+		
+		const repararMaquina = new ArreglarUnaMaquina(complejidad = 10, requiereHerramientas = [])
+		const minion1 = new Ciclope (estamina = 100, rol = mucama,tareas = [repararMaquina]) //tienen como maximo 10 de estamina
+		assert.that(repararMaquina.puedeRealizarla(minion1))
+	}
+	
+	test "un soldado puede realizar una reparacion si la maquina no requiere de ninguna herramienta y tiene suficiente estamina"{
+		
+		const repararMaquina = new ArreglarUnaMaquina(complejidad = 10, requiereHerramientas = [])
+		const minion1 = new Ciclope (estamina = 100, rol = soldado,tareas = [repararMaquina]) //tienen como maximo 10 de estamina
+		assert.that(repararMaquina.puedeRealizarla(minion1))
+	}
+	
+	
+	test "una mucama puede realizar una limpieza"{
+		
+		const LimpiarsectorGrande = new LimpiarSector(grande = true)
+		const minion1 = new Ciclope (estamina = 100, rol = mucama,tareas = [LimpiarsectorGrande ]) //tienen como maximo 10 de estamina
+		assert.that(LimpiarsectorGrande.puedeRealizarla(minion1))
+	}
+	
+	test "realizar una limpieza incrementa el contador de tareas"{
+		
+		const sectorGrande = new LimpiarSector(grande = true)
+		const minion1 = new Ciclope (estamina = 100, rol = mucama,tareas = [sectorGrande]) //tienen como maximo 10 de estamina
+		sectorGrande.esRealizada(minion1)
+		assert.equals(minion1.contadorDeTareaRealizada(),1)
+	}
+	
+	
+}
+
+describe "Punto2"{
+	
+	test "Test de contador de tareas realizadas"{
+	
+	const limpieza1 = new LimpiarSector(grande = true)
+	const limpieza2 = new LimpiarSector(grande = true)
+	const limpieza3 = new LimpiarSector(grande = true)
+	
+	//tres limpiezas = 30 de dificultad
+	
+	const minion1 = new Ciclope (estamina = 100, rol = mucama,tareas = [limpieza1,limpieza2,limpieza3]) //tienen como maximo 10 de estamina
+	
+	minion1.realizarTareasAsignadas()
+		
+	assert.equals(minion1.contadorDeTareaRealizada(),3)
+		
+	}
+	
+	test "Test de experiencia ganada"{
+	
+	const limpieza1 = new LimpiarSector(grande = true)
+	const limpieza2 = new LimpiarSector(grande = true)
+	const limpieza3 = new LimpiarSector(grande = true)
+	
+	//tres limpiezas = 30 de dificultad y realizo tres tareas
+	
+	const minion1 = new Ciclope (estamina = 100, rol = mucama,tareas = [limpieza1,limpieza2,limpieza3]) //tienen como maximo 10 de estamina
+	
+	minion1.realizarTareasAsignadas()
+		
+	assert.equals(minion1.experienciaConseguida(),90)
+		
+	}
+	
+}
+
+//describe "Punto 4 "{
+//	test "Capataz que hace una tarea y la delega"{
+//	
+//	const limpieza1 = new LimpiarSector(grande = true)
+//	const limpieza2 = new LimpiarSector(grande = true)
+//	const limpieza3 = new LimpiarSector(grande = true)
+//	
+//	const minion1 = new Ciclope (estamina = 100, rol = capataz,tareas = [limpieza1,limpieza2,limpieza3]) //tienen como maximo 10 de estamina
+//		
+//		
+//	}
+//	
+//}

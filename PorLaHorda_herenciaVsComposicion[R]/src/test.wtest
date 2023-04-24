@@ -1,0 +1,8 @@
+describe "Personaje:Potencial ofensivo"{
+
+test "Guerrero" {
+	const guerrero = new Personaje(raza = new Guerrero())
+	assert.that(true)
+
+}	
+}
